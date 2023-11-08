@@ -21,10 +21,13 @@ if (isset($_POST['remove_img'])) {
 //Handle remove album ajax request
 if (isset($_POST['remove_album'])) {
   $id = $_POST['id'];
-  
+ $images = $db->fetchAllImages($id);
   if ($db->removeAlbum($id)) {
-  
-    echo
+    if ($images) {
+      foreach ($images as $row) {
+        unlink("./uploads/".$row["img_path"]);
+      }}
+      echo
     $util->showMessage('success', 'Альбом и всё его содержимое удалено');
   } else {
     echo $util->showMessage('danger',
